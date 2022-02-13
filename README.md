@@ -1,46 +1,24 @@
-# Getting Started with Create React App
+**[Try online](https://praron.github.io/sticky-notes/)**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [x] Create a new note of the specified size at the specified position.
+- [x] Change note size by dragging.
+- [x] Move a note by dragging.
+- [x] Remove a note by dragging it over a predefined "trash".
 
-## Available Scripts
+Bonus:
+- [ ] Entering/editing note text.
+- [ ] Moving notes to front (in case of overlapping notes).
+- [x] Saving notes to local storage (restoring them on page load).
+- [x] Different note colors.
+- [ ] Saving notes to REST API. Note: you're not required to implement the API, you can mock it, but the mocks should.
 
-In the project directory, you can run:
+# Architecture
+Main component of application is `<Board />`, it manages state of notes and interaction with user, all other components are stateless.
 
-### `yarn start`
+Primary states of `<Board />` is `notes` (position, dimension, and color of each note, stored as map `id->note`) and `action` (data, required for current, if any, interaction with user. For example, while user creates note by pressing-moving-releasing mouse, it stores position of initial mouse press and current mouse position).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Build
+```
+yarn install
+yarn star
+```
