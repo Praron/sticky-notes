@@ -1,6 +1,6 @@
 import { MouseEvent, useState, useEffect, useRef, forwardRef } from 'react'
 import { Vector, ResizeDirection, getBoundingBox, getRandomColor, vecAdd, vecSub } from './utils'
-import Note, { NoteId, NoteState, minNoteSize } from './Note'
+import Note, { NoteState, minNoteSize } from './Note'
 
 
 type WireframeProps = {
@@ -31,6 +31,8 @@ const TrashBin = forwardRef(({ show }: TrashBinProps, ref: any) =>
   <div ref={ ref } className={ `trash-bin ${show ? 'show' : ''}` }><div className="trash-icon">✕</div></div>
 )
 
+
+export type NoteId = string
 
 type ActionNone = {
   type: 'none'
@@ -234,14 +236,14 @@ const Board = () => {
     >
       <TrashBin ref={ trashRef } show={ action.type === 'move' } />
 
-      { Object.values(notes).map(note => {
-          const isMoving = action.type === 'move' && note.id === action.id && action.isMoved
+      { Object.entries(notes).map(([id, note]) => {
+          const isMoving = action.type === 'move' && id === action.id && action.isMoved
           return <Note
-            key={ note.id }
+            key={ id }
             { ...note }
             isMoving={ isMoving }
-            onMoveStart={ (e) => startNoteMoving(e, note.id) }
-            onResizeStart={ (e, dir) => startNoteResizing(e, note.id, dir) }
+            onMoveStart={ (e) => startNoteMoving(e, id) }
+            onResizeStart={ (e, dir) => startNoteResizing(e, id, dir) }
           />
         })
       }
