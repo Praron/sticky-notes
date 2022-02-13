@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Praron/sticky-notes/static/css/main.633a4f02.css",
-    "main.js": "/Praron/sticky-notes/static/js/main.3d9b9f08.js",
-    "static/js/787.20843c7a.chunk.js": "/Praron/sticky-notes/static/js/787.20843c7a.chunk.js",
-    "index.html": "/Praron/sticky-notes/index.html",
-    "main.633a4f02.css.map": "/Praron/sticky-notes/static/css/main.633a4f02.css.map",
-    "main.3d9b9f08.js.map": "/Praron/sticky-notes/static/js/main.3d9b9f08.js.map",
-    "787.20843c7a.chunk.js.map": "/Praron/sticky-notes/static/js/787.20843c7a.chunk.js.map"
+    "main.css": "/sticky-notes/static/css/main.633a4f02.css",
+    "main.js": "/sticky-notes/static/js/main.5caa4436.js",
+    "static/js/787.20843c7a.chunk.js": "/sticky-notes/static/js/787.20843c7a.chunk.js",
+    "index.html": "/sticky-notes/index.html",
+    "main.633a4f02.css.map": "/sticky-notes/static/css/main.633a4f02.css.map",
+    "main.5caa4436.js.map": "/sticky-notes/static/js/main.5caa4436.js.map",
+    "787.20843c7a.chunk.js.map": "/sticky-notes/static/js/787.20843c7a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.633a4f02.css",
-    "static/js/main.3d9b9f08.js"
+    "static/js/main.5caa4436.js"
   ]
 }
