@@ -17,10 +17,7 @@ const Handle = ({ direction, onResizeStart }: HandleProps) => {
 }
 
 
-export type NoteId = string
-
 export interface NoteState {
-  id: NoteId,
   position: Vector,  // Coordinates of top-left corner of note, in px.
   dimension: Vector,  // Width (`x`) and height (`y`) of note, in px.
   color: Color,
