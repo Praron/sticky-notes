@@ -1,38 +1,126 @@
-.App {
-  text-align: center;
+.app {
+  --dracula-bg: #282a36;
+  --dracula-fg: #f8f8f2;
+  --dracula-selected: #44475a;
+  --dracula-comment: #6272a4;
+  --dracula-cyan: #8be9fd;
+  --dracula-green: #50fa7b;
+  --dracula-orange: #ffb86c;
+  --dracula-pink: #ff79c6;
+  --dracula-purple: #bd93f9;
+  --dracula-red: #ff5555;
+  --dracula-yellow: #f1fa8c;
+
+  height: 100%;
+  padding: 1rem;
+  background-color: var(--dracula-bg);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.board {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-image: radial-gradient(#44475a .5px, transparent .5px);
+  background-size: 5px 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.note {
+  --hover-y: 0rem;
+  position: absolute;
+  background-color: var(--dracula-red);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: filter 0.1s ease-in;
+  transform: translate(calc(var(--position-x)), calc(var(--position-y) - var(--hover-y)));
+  box-shadow: rgba(0, 0, 0, 0.5) 0rem var(--hover-y);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.note:hover {
+  filter: brightness(110%);
 }
 
-.App-link {
-  color: #61dafb;
+.note.is-moving {
+  --hover-y: 0.5rem;
+  filter: brightness(120%);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.wireframe {
+  position: absolute;
+  border-radius: 1rem;
+  border-width: 0.25rem;
+  border-color: var(--dracula-fg);
+  border-style: dashed;
+}
+
+
+.handle {
+  position: absolute;
+  height: 2rem;
+  width: 2rem;
+  background-color: var(--dracula-fg);
+  opacity: 0;
+  transition: opacity 0.1s ease-in;
+}
+
+.note:hover:not(.is-moving) .handle {
+  opacity: 75%;
+}
+
+
+.handle.top-left {
+  top: 0;
+  left: 0;
+  border-radius: 1rem 0 1rem 0;
+  cursor: nwse-resize;
+}
+
+.handle.top-right {
+  top: 0;
+  right: 0;
+  border-radius: 0 1rem 0 1rem;
+  cursor: nesw-resize;
+}
+
+.handle.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 1rem 0 1rem;
+  cursor: nesw-resize;
+}
+
+.handle.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-radius: 1rem 0 1rem 0;
+  cursor: nwse-resize;
+}
+
+
+.trash-bin {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  width: 5rem;
+  height: 5rem;
+  border: 0.25rem solid;
+  border-radius: 2rem;
+  color: var(--dracula-comment);
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.trash-bin.show {
+  opacity: 100%;
+}
+
+.trash-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  user-select: none;
 }
