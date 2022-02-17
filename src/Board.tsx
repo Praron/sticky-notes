@@ -234,7 +234,7 @@ const Board = () => {
       onMouseUp={ handleMouseUp }
       onMouseLeave= { handleMouseUp }
     >
-      <TrashBin ref={ trashRef } show={ action.type === 'move' } />
+      <TrashBin ref={ trashRef } show={ action.type === 'move' && action.isMoved } />
 
       { Object.entries(notes).map(([id, note]) => {
           const isMoving = action.type === 'move' && id === action.id && action.isMoved
@@ -249,6 +249,13 @@ const Board = () => {
       }
 
       { action.type === 'create' ? <Wireframe { ...action } /> : null }
+
+      <div
+        className="empty-board-message"
+        style={{ opacity: Object.keys(notes).length === 0 && action.type === 'none' ? '100%' : '0' }}
+      >
+        Draw a rectangle
+      </div>
     </div>
   )
 }
