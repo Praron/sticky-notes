@@ -4,14 +4,14 @@ import { ResizeDirection, Vector, Color, resizeDirections } from './utils'
 
 interface HandleProps {
   direction: ResizeDirection,
-  onResizeStart: (event: MouseEvent<HTMLDivElement>, direction: ResizeDirection) => void,
+  onMouseDown: (event: MouseEvent<HTMLDivElement>, direction: ResizeDirection) => void,
 }
 
-const Handle = ({ direction, onResizeStart }: HandleProps) => {
+const Handle = ({ direction, onMouseDown }: HandleProps) => {
   return (
     <div
       className={`handle ${direction}`}
-      onMouseDown={ (e) => onResizeStart(e, direction) }
+      onMouseDown={ (e) => onMouseDown(e, direction) }
     />
   )
 }
@@ -27,13 +27,13 @@ export type NoteProps =
   & NoteState
   & {
     isMoving: boolean,
-    onMoveStart: (event: MouseEvent<HTMLDivElement>) => void,
-    onResizeStart: (event: MouseEvent<HTMLDivElement>, direction: ResizeDirection) => void,
+    onNoteMouseDown: (event: MouseEvent<HTMLDivElement>) => void,
+    onHandleMouseDown: (event: MouseEvent<HTMLDivElement>, direction: ResizeDirection) => void,
   }
 
 export const minNoteSize = 100
 
-const Note = ({ position, dimension, color, isMoving, onMoveStart, onResizeStart }: NoteProps) => {
+const Note = ({ position, dimension, color, isMoving, onNoteMouseDown, onHandleMouseDown }: NoteProps) => {
   return (
     <div
       className={ `note${isMoving ? ' is-moving': ''}` }
@@ -44,13 +44,13 @@ const Note = ({ position, dimension, color, isMoving, onMoveStart, onResizeStart
         ['--position-x' as any]: `${position.x}px`,
         ['--position-y' as any]: `${position.y}px`,
       }}
-      onMouseDown={ onMoveStart }
+      onMouseDown={ onNoteMouseDown }
     >
       { resizeDirections.map(direction =>
           <Handle
             key={ direction }
             direction={ direction }
-            onResizeStart={ onResizeStart }
+            onMouseDown={ onHandleMouseDown }
           />
         )
       }

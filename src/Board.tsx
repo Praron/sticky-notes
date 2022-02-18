@@ -43,23 +43,29 @@ type ActionCreate = {
   type: 'create',
 } & WireframeProps
 
+// Note is clicked but not draged.
+type ActionHold = {
+  type: 'hold',
+  id: NoteId,
+}
+
 type ActionMove = {
   type: 'move',
   id: NoteId,
   mousePosition: Vector,
-  isMoved: boolean,
 }
 
 type ActionResize = {
   type: 'resize',
   id: NoteId,
-  direction: ResizeDirection,
   mousePosition: Vector,
+  direction: ResizeDirection,
 }
 
 type Action =
   | ActionNone
   | ActionCreate
+  | ActionHold
   | ActionMove
   | ActionResize
 
@@ -110,11 +116,10 @@ const Board = () => {
     setAction({ type: 'create', start, end })
   }
 
-  const startNoteMoving = (event: MouseEvent<HTMLDivElement>, id: NoteId) => {
+  const startNoteHolding = (event: MouseEvent<HTMLDivElement>, id: NoteId) => {
     event.stopPropagation()
 
-    const mousePosition = eventToVector(event)
-    setAction({ type: 'move', id, mousePosition, isMoved: false })
+    setAction({ type: 'hold', id })
   }
 
   const startNoteResizing = (event: MouseEvent<HTMLDivElement>, id: NoteId, direction: ResizeDirection) => {
@@ -122,48 +127,6 @@ const Board = () => {
 
     const mousePosition = eventToVector(event)
     setAction({ type: 'resize', id, direction, mousePosition })
-  }
-
-  const handleMouseUp = () => {
-    switch (action.type) {
-      case 'create': {
-        const { position, dimension } = getBoundingBox(action.start, action.end)
-
-        if (dimension.x > minNoteSize && dimension.y > minNoteSize) {
-          const id = nextId()
-          const color = getRandomColor()
-          setNotes(prev => ({ ...prev, [id]: { position, dimension, id, color } }))
-        }
-
-        break
-      }
-
-      case 'move': {
-        const { id } = action
-
-        if (!action.isMoved) {
-          setNotes(prev => ({ ...prev, [id]: { ...prev[id], color: getRandomColor(prev[id].color) } }))
-        }
-
-        const { position, dimension } = notes[id]
-        const trashBin = trashRef.current?.getBoundingClientRect()
-
-        const collided = trashBin &&
-          position.x < trashBin.right &&
-          position.x + dimension.x > trashBin.x &&
-          position.y < trashBin.bottom &&
-          position.y + dimension.y > trashBin.y
-
-        if (collided) {
-          // Remove note if it's collided with trash bin.
-          setNotes(prev => Object.fromEntries(Object.entries(prev).filter(([k]) => k !== id)))
-        }
-
-        break
-      }
-    }
-
-    setAction(actionNone)
   }
 
   const handleMouseMove = (event: MouseEvent<HTMLDivElement>) => {
@@ -174,12 +137,19 @@ const Board = () => {
         break
       }
 
+      case 'hold': {
+        const { id } = action
+        const mousePosition = eventToVector(event)
+        setAction(prev => prev.type === 'hold' ? { type: 'move', id, mousePosition } : { ...prev })
+        break
+      }
+
       case 'move': {
         const { id } = action
         const mousePosition = eventToVector(event)
         const delta = vecSub(mousePosition, action.mousePosition)
         const position = vecAdd(notes[id].position, delta)
-        setAction(prev => prev.type === 'move' ? { ...prev, mousePosition, isMoved: true } : { ...prev })
+        setAction(prev => prev.type === 'move' ? { ...prev, mousePosition } : { ...prev })
         setNotes(prev => ({ ...prev, [id]: { ...prev[id], position } }))
         break
       }
@@ -225,6 +195,50 @@ const Board = () => {
     }
   }
 
+  const handleMouseUp = () => {
+    switch (action.type) {
+      case 'create': {
+        const { position, dimension } = getBoundingBox(action.start, action.end)
+
+        if (dimension.x > minNoteSize && dimension.y > minNoteSize) {
+          const id = nextId()
+          const color = getRandomColor()
+          setNotes(prev => ({ ...prev, [id]: { position, dimension, id, color } }))
+        }
+
+        break
+      }
+
+      case 'hold': {
+        const { id } = action
+        setNotes(prev => ({ ...prev, [id]: { ...prev[id], color: getRandomColor(prev[id].color) } }))
+        break
+      }
+
+      case 'move': {
+        const { id } = action
+
+        const { position, dimension } = notes[id]
+        const trashBin = trashRef.current?.getBoundingClientRect()
+
+        const collided = trashBin &&
+          position.x < trashBin.right &&
+          position.x + dimension.x > trashBin.x &&
+          position.y < trashBin.bottom &&
+          position.y + dimension.y > trashBin.y
+
+        if (collided) {
+          // Remove note if it's collided with trash bin.
+          setNotes(prev => Object.fromEntries(Object.entries(prev).filter(([k]) => k !== id)))
+        }
+
+        break
+      }
+    }
+
+    setAction(actionNone)
+  }
+
   return (
     <div
       ref={ boardRef }
@@ -234,16 +248,16 @@ const Board = () => {
       onMouseUp={ handleMouseUp }
       onMouseLeave= { handleMouseUp }
     >
-      <TrashBin ref={ trashRef } show={ action.type === 'move' && action.isMoved } />
+      <TrashBin ref={ trashRef } show={ action.type === 'move' } />
 
       { Object.entries(notes).map(([id, note]) => {
-          const isMoving = action.type === 'move' && id === action.id && action.isMoved
+          const isMoving = action.type === 'move' && id === action.id
           return <Note
             key={ id }
             { ...note }
             isMoving={ isMoving }
-            onMoveStart={ (e) => startNoteMoving(e, id) }
-            onResizeStart={ (e, dir) => startNoteResizing(e, id, dir) }
+            onNoteMouseDown={ (e) => startNoteHolding(e, id) }
+            onHandleMouseDown={ (e, dir) => startNoteResizing(e, id, dir) }
           />
         })
       }
