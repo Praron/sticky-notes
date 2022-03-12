@@ -2,7 +2,8 @@
 
 # Requirements
 Time limit: 4-6 hours of work.
-Without external libraries, only desktop.
+Without external libraries.
+Support only desktop.
 
 Task is to implement a single-page web application for sticky notes.
 You are required to implement at least 3 of the following 4 features:
