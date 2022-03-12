@@ -1,5 +1,12 @@
 **[Try online](https://praron.github.io/sticky-notes/)**
 
+# Requirements
+Time limit: 4-6 hours of work.
+Without external libraries, only desktop.
+
+Task is to implement a single-page web application for sticky notes.
+You are required to implement at least 3 of the following 4 features:
+
 - [x] Create a new note of the specified size at the specified position.
 - [x] Change note size by dragging.
 - [x] Move a note by dragging.
@@ -12,6 +19,8 @@ Bonus:
 - [x] Different note colors.
 - [ ] Saving notes to REST API. Note: you're not required to implement the API, you can mock it, but the mocks should.
 
+
+
 # Architecture
 Main component of application is `<Board />`, it manages state of notes and interaction with user, all other components are stateless.
 
@@ -20,5 +29,5 @@ Primary states of `<Board />` is `notes` (position, dimension, and color of each
 # Build
 ```
 yarn install
-yarn star
+yarn start
 ```
